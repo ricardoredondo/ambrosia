@@ -1,0 +1,88 @@
+version: '3.8'
+
+
+# All services are to be called 
+# WORKING Directory for all services is defined to be '/app'
+
+# docker-compose run --service-ports loader_app bash 
+
+services:
+  jenkins:
+    build:
+      context: ./jenkins
+      dockerfile: ./Dockerfile
+    stdin_open: true
+    container_name: jenkins_container
+    image: jenkins_image
+    working_dir: /app
+    expose:
+      - '80'
+    volumes:
+      - './jenkins:/app:delegated'             # Volumen where the code is
+      - './storage_data:/storage_data:delegated'  # Volume where the Embeddings will be stored
+    networks:
+      - ambosia-dev
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - reverse-proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jenkins.rule=HOST(`jenkins.localtest.me`) && PathPrefix(`/`)"
+      - "traefik.http.routers.jenkins.entrypoints=web"
+      - "traefik.http.routers.jenkins.priority=3"
+      - "traefik.http.services.jenkins.loadbalancer.server.port=8080"
+      - "traefik.docker.network=ambosia-dev"
+    
+    
+
+  loader_app:
+    build: 
+      context: ./loader_app
+      dockerfile: ./Dockerfile
+    stdin_open: true
+    container_name: loader_app_container
+    image: loader_app_image
+    working_dir: /app
+    volumes:
+      - './loader_app:/app:delegated'             # Volumen where the code is
+      - './storage_data:/storage_data:delegated'  # Volume where the Embeddings will be stored
+      - './source_loader:/source_loader:delegated'  # Volume where the Embeddings will be stored
+    networks:
+      - ambosia-dev  
+    # ports:
+    #   - "8000:8000"
+    # command: python app.py
+
+  reverse-proxy:
+    image: 'traefik:v2.0'
+    command:
+      #- "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+     - '80:80'
+     - '8099:8080'
+    volumes:
+     - '/var/run/docker.sock:/var/run/docker.sock'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.proxy.rule=HOST(`proxy.localtest.me`)"
+      - "traefik.http.routers.proxy.entrypoints=web"
+      - "traefik.http.services.proxy.loadbalancer.server.port=8080"
+      - "traefik.docker.network=ambosia-dev"
+    networks:
+      ambosia-dev:
+        aliases:
+          - jenkins.localtest.me
+          # - shed.localtest.me
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+
+
+networks:
+  ambosia-dev:
+    name: ambosia-dev
