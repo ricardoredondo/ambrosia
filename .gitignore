@@ -7,8 +7,8 @@ __pycache__/
 *.so
 
 #Custom
-source_loader/*
-storage_data/*
+# source_loader/*
+# storage_data/*
 .DS_Store
 __pycache__
 
