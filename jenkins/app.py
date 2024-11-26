@@ -23,9 +23,8 @@ app.register_blueprint(service_bp)
 # Initialize custom objects
 with app.app_context():
     app.config['VERSION']   = "0.0.2"
-    app.config['VDB']       = VectorDB()
-    app.config['DEXTER']    = Dexter()
-
+    app.config['LLM_NAME']  = "gpt-4o"
+    app.config['VDB']       = VectorDB(app.config['LLM_NAME'])
 
 @app.route('/', methods=['GET'])
 def home():

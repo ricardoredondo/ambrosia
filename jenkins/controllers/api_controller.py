@@ -1,3 +1,5 @@
+from services.dexter import Dexter
+
 from flask import Blueprint, jsonify, session, current_app, request, g
 
 api_bp = Blueprint('api', __name__)
@@ -18,12 +20,19 @@ def load_query():
 @api_bp.route('/api/ask', methods=['POST'])
 def ask():
     vdb = current_app.config['VDB']
-    vectores = vdb.fetch(q.query)
+    
+    #  This line will get the semantically similar vectors
+    vectores = vdb.fetch(g.query)
+    dexter = Dexter(current_app.config['LLM_NAME'])
+    
+    answer = dexter.ask(vectores)
+    
+    print(vectores)
     response = {
         "q":        g.query,
         "response": "",
-        "prompt":   "",
-        "vectors":  vectores
+        "prompt":   ""
+        # "vectors":  vectores
 
     }
     return jsonify(response), 200

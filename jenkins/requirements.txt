@@ -35,6 +35,7 @@ itsdangerous==2.2.0
 Jinja2==3.1.4
 langchain==0.0.213
 langchainplus-sdk==0.0.20
+lark==1.2.2
 lz4==4.3.3
 MarkupSafe==3.0.2
 marshmallow==3.23.1
