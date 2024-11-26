@@ -1,6 +1,7 @@
 from services.dexter import Dexter
 
 from flask import Blueprint, jsonify, session, current_app, request, g
+import pprint
 
 api_bp = Blueprint('api', __name__)
 
@@ -22,15 +23,14 @@ def ask():
     vdb = current_app.config['VDB']
     
     #  This line will get the semantically similar vectors
-    vectores = vdb.fetch(g.query)
-    dexter = Dexter(current_app.config['LLM_NAME'])
+    context    = vdb.fetch(g.query)
+    dexter      = Dexter(current_app.config['LLM_NAME'], vdb.vector_db())
+    answer      = dexter.ask(g.query)
     
-    answer = dexter.ask(vectores)
-    
-    print(vectores)
+    # pprint.pprint(context)
     response = {
         "q":        g.query,
-        "response": "",
+        "response": answer,
         "prompt":   ""
         # "vectors":  vectores
 

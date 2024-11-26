@@ -1,5 +1,6 @@
 import openai
 import os
+import pprint
 
 from dotenv import load_dotenv, find_dotenv
 from langchain.vectorstores import Chroma
@@ -28,6 +29,10 @@ class VectorDB:
             embedding_function=embedding
         )
         print(f"Collection count: {self.vectordb._collection.count()}")
+
+
+    def vector_db(self):
+        return self.vectordb
 
     def fetch(self, query):
         # NOTE: Here we can change the Search to be a different kind of retrival:
@@ -62,4 +67,6 @@ class VectorDB:
         # docs = retriever.get_relevant_documents(query)
 
         docs = self.vectordb.similarity_search(query, k=5)
+        # print(len(docs))
+        # pprint.pprint(docs[0].page_content)
         return docs

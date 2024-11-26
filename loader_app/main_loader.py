@@ -54,6 +54,7 @@ class MainLoader:
         
     def load_txt(self, file):
         print(f"TXTLoader: {self.full_path(file)}")
+        print(f"TXTLoader Is not implemented yet")
         # TODO: Load the TXT document
 
     #  Build the Document's full path
