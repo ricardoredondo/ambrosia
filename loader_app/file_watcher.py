@@ -47,7 +47,7 @@ class Watcher:
         self.observer.join()
 
     def go_to_load(self):
-        print(f"Checking for Files...")
+        print(f"Checking for files to load...")
         files = self.list_files()
 
         if files:
@@ -56,9 +56,10 @@ class Watcher:
                                     self.output_directory)
             main_loader.run()
         else:
-            print("No files to process.")
+            print("No files to load.")
 
     def list_files(self):
-        file_extensions = ['TXT', 'PDF']
+        file_extensions = ['PDF']       # TODO: Change this to a ENV
+                                        # TODO: Allow other type of files
         
         return [f for f in os.listdir(self.directory_to_watch) if os.path.isfile(os.path.join(self.directory_to_watch, f)) and any(fnmatch.fnmatch(f.lower(), f"*.{ext.lower()}") for ext in file_extensions)]

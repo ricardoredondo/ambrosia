@@ -7,8 +7,6 @@ from dotenv import load_dotenv, find_dotenv
 from langchain.vectorstores import Chroma
 from langchain.embeddings.openai import OpenAIEmbeddings
 
-
-
 class Persister:
 
     def __init__(self, splits, output_folder):
@@ -17,10 +15,9 @@ class Persister:
         self.current_folder = os.path.join(self.output_folder, "current")
         self.embedding = OpenAIEmbeddings()
 
-        # TODO:  Do I need this? I need a Python Guru here. 
+        # TODO:  This should be refactored to a single place
         _ = load_dotenv(find_dotenv()) # read local .env file
         openai.api_key  = os.environ['OPENAI_API_KEY']
-
 
     def run(self):
         if not os.path.exists(self.current_folder):
@@ -29,22 +26,20 @@ class Persister:
             self.backup()
         self.persist()
 
-
     def persist(self):
-        print("Persist...")
+        print("Persisting data...")
 
-        print(f"{self.current_folder}")
         vectordb = Chroma.from_documents(
             documents=self.splits,
             embedding=self.embedding,
             persist_directory=self.current_folder
         )
-        print(vectordb._collection.count())
+        print(f"Total Collection Count after persist: {vectordb._collection.count()}")
         vectordb.persist()
-        print("Done")
+        print("Done Persisting data.")
 
     def backup(self):
-        print("Backup...")
+        print("Creating Backup package...")
         current_time = int(time.time())
         bkup_path = f"{self.current_folder}_{current_time}"
         

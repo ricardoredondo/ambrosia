@@ -27,7 +27,6 @@ class Dexter:
             chain_type_kwargs={"prompt": self.prompt()}
         )
         result = qa_chain({"query": query})
-        print(result)
         return result["result"]
 
 

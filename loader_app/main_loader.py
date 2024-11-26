@@ -8,7 +8,6 @@ from langchain.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from persister import Persister
 
-
 class MainLoader:
     def __init__(self, files, source_folder, output_folder):
         self.files = files
@@ -16,7 +15,6 @@ class MainLoader:
         self.source_folder = source_folder
         _ = load_dotenv(find_dotenv()) # read local .env file
         openai.api_key  = os.environ['OPENAI_API_KEY']
-
 
     def run(self):
         docs = self.load_documents()
@@ -45,7 +43,6 @@ class MainLoader:
                 # TODO: Load the TXT file
                 print("  -> This is a TXT file")
         return docs
-
 
     def loader_pdf(self, file):
         print(f"-> PDFLoader: {self.full_path(file)}")

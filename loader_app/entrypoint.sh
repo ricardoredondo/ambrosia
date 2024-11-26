@@ -15,7 +15,6 @@ show_info(){
     echo -e "\n\n\n"
 }
 
-
 install_reqs(){
     echo "Upgrade PIP Version"
     pip install --upgrade pip
@@ -32,13 +31,11 @@ install_reqs(){
     pip install --no-cache-dir -r requirements.txt
 }
 
-
 cat <<EOT >> ~/.bashrc
     run(){
         python app.py
     }
 EOT
-
 
 setup_app(){
     show_info
