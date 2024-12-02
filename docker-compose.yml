@@ -1,6 +1,33 @@
 version: '3.8'
 
 services:
+  secretary:
+    build:
+      context: ./secretary
+      dockerfile: ./Dockerfile
+    stdin_open: true
+    container_name: secretary_container
+    image: secretary_image
+    working_dir: /app
+    expose:
+      - '80'
+    volumes:
+      - './secretary:/app:delegated'             # Volumen where the code is
+    networks:
+      - ambosia-dev
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - reverse-proxy
+      - jenkins
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.secretary.rule=HOST(`secretary.localtest.me`) && PathPrefix(`/`)"
+      - "traefik.http.routers.secretary.entrypoints=web"
+      - "traefik.http.routers.secretary.priority=3"
+      - "traefik.http.services.secretary.loadbalancer.server.port=8080"
+      - "traefik.docker.network=ambosia-dev"
+  
   jenkins:
     build:
       context: ./jenkins

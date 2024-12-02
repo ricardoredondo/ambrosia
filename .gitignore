@@ -11,6 +11,9 @@ __pycache__/
 # storage_data/*
 .DS_Store
 __pycache__
+node_modules/   # Ignore all folders called "node_modules"
+
+
 
 # Distribution / packaging
 .Python
