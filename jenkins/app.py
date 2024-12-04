@@ -1,12 +1,15 @@
 import os
 from flask import Flask, session, g
 from dotenv import load_dotenv, find_dotenv
+from flask_cors import CORS
 
 from controllers.api_controller import api_bp
 from controllers.service_controller import service_bp
 # from pathlib import Path
 from services.vector_db import VectorDB
 from services.dexter import Dexter
+
+
 
 _ = load_dotenv(find_dotenv()) # read local .env file
 # env_path = Path('..') / '.env'
@@ -15,6 +18,10 @@ _ = load_dotenv(find_dotenv()) # read local .env file
 
 app = Flask(__name__)
 app.secret_key = os.environ['SERVER_KEY']  # Replace with a secure key
+
+# Enable CORS for all routes
+CORS(app)
+
 
 # Register blueprints
 app.register_blueprint(api_bp)

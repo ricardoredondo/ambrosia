@@ -13,7 +13,7 @@ if __name__ == '__main__':
     print(f"============================================================")
     print("Starting Loader Service...")
     print(f"Source Folder: {DIRECTORY_TO_WATCH}")
-    print(f"Storage Folder: {DIRECTORY_TO_WATCH}")
+    print(f"Storage Folder: {OUTPUT_DIRECTORY}")
     print(f"============================================================")
     print(f"\n\n\n\n")
 
