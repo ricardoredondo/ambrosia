@@ -77,6 +77,11 @@ API App
 * docker-compose run --service-ports jenkins bash 
 * docker-compose up jenkins 
 
+FrontEnd App
+* docker-compose run --service-ports secretary bash 
+* docker-compose up secretary
+
+
 Both services have a `run` command that needs to executed afert loggin into the shell. Docker Compose up will run the service from the start
 
 
@@ -112,4 +117,15 @@ print("Python version:", sys.version)
 
 # pip install -U langchain-community
 ```
+
+
+
+
+## TODO
+
+
+### Loader APP:
+
+* Check for preious Current version and decide if it is worth generating a new version
+* 
 

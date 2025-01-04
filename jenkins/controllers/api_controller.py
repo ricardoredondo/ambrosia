@@ -20,19 +20,15 @@ def load_query():
 
 @api_bp.route('/api/ask', methods=['POST'])
 def ask():
-    vdb = current_app.config['VDB']
-    
-    #  This line will get the semantically similar vectors
-    context    = vdb.fetch(g.query)
-    dexter      = Dexter(current_app.config['LLM_NAME'], vdb.vector_db())
-    answer      = dexter.ask(g.query)
+    vdb     = current_app.config['VDB']
+    dexter  = Dexter(current_app.config['LLM_NAME'], vdb.vector_db())
+    answer  = dexter.ask(g.query)
     
     # pprint.pprint(context)
     response = {
         "q":        g.query,
         "response": answer,
         "prompt":   ""
-        # "vectors":  vectores
 
     }
     return jsonify(response), 200

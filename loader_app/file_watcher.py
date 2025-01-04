@@ -21,12 +21,11 @@ class Handler(FileSystemEventHandler):
             print(f"Received modified event - {event.src_path}")
 
 class Watcher:
-    def __init__(self, directory_to_watch, output_directory, interval):
-        self.directory_to_watch = directory_to_watch
-        self.output_directory = output_directory
-        self.interval = interval
-        self.observer = Observer()
-        self.event_handler = FileSystemEventHandler()
+    def __init__(self, directory_to_watch, output_directory):
+        self.directory_to_watch       = directory_to_watch
+        self.output_directory         = output_directory
+        self.observer                 = Observer()
+        self.event_handler            = FileSystemEventHandler()
         self.event_handler.on_created = self.on_created
   
     def on_created(self, event):
@@ -34,9 +33,12 @@ class Watcher:
         self.go_to_load()
 
     def run(self):
-        #  When service start will create a new version of the DB
+        # TODO: When service start will create a new version of the DB
+        # TODO: This should be refactored
         self.go_to_load()
-        self.observer.schedule(self.event_handler, self.directory_to_watch, recursive=True)
+        self.observer.schedule(self.event_handler, 
+                               self.directory_to_watch, 
+                               recursive=True)
         self.observer.start()
         
         try:
@@ -44,6 +46,8 @@ class Watcher:
                 time.sleep(5)
         except KeyboardInterrupt:
             self.observer.stop()
+        
+        
         self.observer.join()
 
     def go_to_load(self):

@@ -30,7 +30,7 @@ app.register_blueprint(service_bp)
 # Initialize custom objects
 with app.app_context():
     app.config['VERSION']   = "0.0.2"
-    app.config['LLM_NAME']  = "gpt-4o"
+    app.config['LLM_NAME']  = 'gpt-3.5-turbo'
     app.config['VDB']       = VectorDB(app.config['LLM_NAME'])
 
 @app.route('/', methods=['GET'])

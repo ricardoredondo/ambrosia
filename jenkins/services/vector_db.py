@@ -14,10 +14,10 @@ class VectorDB:
     def __init__(self, llm_name):
         # TODO. This constructor should be refactored to use the ENV variables
         # TODO: We should have just one instance of the VectorDB
-        print("===>>>> VectorDB Constructor")
+
         openai.api_key  = os.environ['OPENAI_API_KEY']
-        self.llm_name = 'gpt-3.5-turbo-instruct'                    # ONLY this Model works for SelfQueryRetriever
-        # self.llm_name = 'gpt-4o'                                  # Note: Models are only for SelfQueryRetriever
+        self.llm_name = llm_name                    # ONLY this Model works for SelfQueryRetriever
+        # self.llm_name = 'gpt-3.5-turbo-instruct'                    # ONLY this Model works for SelfQueryRetriever
                                                                     
         persist_directory = "/storage_data"                         # TODO. Change this to a ENV
         current_folder = os.path.join(persist_directory, "current") # TODO. Change this to a ENV
@@ -34,6 +34,10 @@ class VectorDB:
     def vector_db(self):
         return self.vectordb
 
+    # This method is not in use. 
+    # Used to load the documents from the VectorDB. But considering the implementation in the Dexter class, 
+    # this method is no longer needed.
+    # Leaving the code commented out for future reference.
     def fetch(self, query):
         # NOTE: Here we can change the Search to be a different kind of retrival:
         # * SelfQueryRetriever
@@ -43,7 +47,7 @@ class VectorDB:
         # metadata_field_info = [
         #     AttributeInfo(
         #         name="source",
-        #         description="The lecture the chunk is from, should be one of `docs/cs229_lectures/MachineLearning-Lecture01.pdf`, `docs/cs229_lectures/MachineLearning-Lecture02.pdf`, or `docs/cs229_lectures/MachineLearning-Lecture03.pdf`",
+        #         description="The lecture the chunk is from, should be one of `<path>`",
         #         type="string",
         #     ),
         #     AttributeInfo(
@@ -52,8 +56,6 @@ class VectorDB:
         #         type="integer",
         #     ),
         # ]
-
-        # print(f"===============> {self.llm_name}")
 
         # llm = OpenAI(model=self.llm_name, temperature=0)
         # retriever = SelfQueryRetriever.from_llm(
@@ -67,6 +69,4 @@ class VectorDB:
         # docs = retriever.get_relevant_documents(query)
 
         docs = self.vectordb.similarity_search(query, k=5)
-        # print(len(docs))
-        # pprint.pprint(docs[0].page_content)
         return docs

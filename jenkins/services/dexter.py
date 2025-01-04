@@ -3,11 +3,9 @@
 
 import os
 import openai
-
 from langchain.prompts import PromptTemplate
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import RetrievalQA
-
 
 class Dexter:
     def __init__(self, llm_name, vectordb):
@@ -18,8 +16,6 @@ class Dexter:
 
 
     def ask(self, query):
-        print("Asking.....")
-
         qa_chain = RetrievalQA.from_chain_type(
             self.llm,
             retriever=self.vectordb.as_retriever(),
@@ -31,12 +27,6 @@ class Dexter:
 
 
     def prompt(self):
-        # template ="""Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer. Use three sentences maximum. Keep the answer as concise as possible. Always say "thanks for asking!" at the end of the answer. 
-        # {context}
-        # Question: {question}
-        # Helpful Answer:"""
-
-
         template = """
         Asuma su nombre como Ambrosia, una aplicación de chatbot de salud enfocada en responder preguntas relacionas a dietas antinflamatorias.
         
